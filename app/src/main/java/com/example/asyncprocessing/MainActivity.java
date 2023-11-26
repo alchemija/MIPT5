@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText currencyCodeEditText;
     private List<ExchangeRate> allExchangeRates;
     private List<ExchangeRate> filteredExchangeRates;
+    private ArrayAdapter<ExchangeRate> adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,11 +30,11 @@ public class MainActivity extends AppCompatActivity {
         allExchangeRates = new ArrayList<>();
         filteredExchangeRates = new ArrayList<>();
 
-        ArrayAdapter<ExchangeRate> adapter = new ArrayAdapter<>(this,
+        adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, filteredExchangeRates);
         exchangeRateListView.setAdapter(adapter);
 
-        DataLoader dataLoader = new DataLoader(MainActivity.this);
+        DataLoader dataLoader = new DataLoader(this);
         dataLoader.execute();
 
         currencyCodeEditText.addTextChangedListener(new TextWatcher() {
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 filteredExchangeRates.add(rate);
             }
         }
-        ((ArrayAdapter) exchangeRateListView.getAdapter()).notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     public void refreshListView(List<ExchangeRate> exchangeRates) {
@@ -67,6 +68,6 @@ public class MainActivity extends AppCompatActivity {
         allExchangeRates.addAll(exchangeRates);
         filteredExchangeRates.clear();
         filteredExchangeRates.addAll(exchangeRates);
-        ((ArrayAdapter) exchangeRateListView.getAdapter()).notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 }
